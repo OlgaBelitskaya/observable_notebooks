@@ -1,0 +1,14 @@
+{
+  "name": "@olgabelitskaya/color-gradients",
+  "main": "fbcd6329f4c1c46b@254.js",
+  "version": "254.0.0",
+  "homepage": "https://observablehq.com/@olgabelitskaya/color-gradients",
+  "author": {
+    "name": "Olga Belitskaya",
+    "url": "https://observablehq.com/@olgabelitskaya"
+  },
+  "type": "module",
+  "peerDependencies": {
+    "@observablehq/runtime": "4"
+  }
+}
