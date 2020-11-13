@@ -1,0 +1,14 @@
+{
+  "name": "@olgabelitskaya/html-styling",
+  "main": "3278ab41f151c174@564.js",
+  "version": "564.0.0",
+  "homepage": "https://observablehq.com/@olgabelitskaya/html-styling",
+  "author": {
+    "name": "Olga Belitskaya",
+    "url": "https://observablehq.com/@olgabelitskaya"
+  },
+  "type": "module",
+  "peerDependencies": {
+    "@observablehq/runtime": "4"
+  }
+}
