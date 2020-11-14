@@ -1,0 +1,14 @@
+{
+  "name": "@olgabelitskaya/basic-charts",
+  "main": "be9e50bce75e8d03@213.js",
+  "version": "213.0.0",
+  "homepage": "https://observablehq.com/@olgabelitskaya/basic-charts",
+  "author": {
+    "name": "Olga Belitskaya",
+    "url": "https://observablehq.com/@olgabelitskaya"
+  },
+  "type": "module",
+  "peerDependencies": {
+    "@observablehq/runtime": "4"
+  }
+}
