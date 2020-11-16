@@ -1,6 +1,6 @@
-#  📑 Basic Charts
+# 📑 Basic Charts
 
-https://observablehq.com/@olgabelitskaya/basic-charts@213
+https://observablehq.com/@olgabelitskaya/basic-charts@259
 
 View this notebook in your browser by running a web server in this folder. For
 example:
