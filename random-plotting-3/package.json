@@ -1,0 +1,14 @@
+{
+  "name": "@olgabelitskaya/random-plotting-3",
+  "main": "179f9c9085d224e3@218.js",
+  "version": "218.0.0",
+  "homepage": "https://observablehq.com/@olgabelitskaya/random-plotting-3",
+  "author": {
+    "name": "Olga Belitskaya",
+    "url": "https://observablehq.com/@olgabelitskaya"
+  },
+  "type": "module",
+  "peerDependencies": {
+    "@observablehq/runtime": "4"
+  }
+}
