@@ -1,4 +1,4 @@
-// https://observablehq.com/@olgabelitskaya/tf-practice@145
+// https://observablehq.com/@olgabelitskaya/tf-practice@213
 export default function define(runtime, observer) {
   const main = runtime.module();
   main.variable(observer()).define(["md"], function(md){return(
@@ -102,7 +102,7 @@ tidy(()=>
   main.variable(observer("tsneMNIST")).define("tsneMNIST", ["tf"], function(tf){return(
 async function* tsneMNIST(data) {
   const tsne=tf.tsne.tsne(data);
-  await tsne.iterateKnn(500);
+  await tsne.iterateKnn(800);
   for (let i=0; i<1000; ++i) {
     await tsne.iterate();
     yield await tsne.coordinates().data();}}
@@ -119,6 +119,43 @@ function get_coord(data) {
 )});
   main.variable(observer("coord")).define("coord", ["get_coord","tsneCoord"], function(get_coord,tsneCoord){return(
 get_coord(tsneCoord)
+)});
+  main.variable(observer("colors")).define("colors", function(){return(
+['#ff3636','#ff9936','#ffff36','#36ff36','#369936',
+        '#36ffff','#3699ff','#3636ff','#ff36ff','#993699']
+)});
+  main.variable(observer()).define(["coord","randInt"], function(coord,randInt){return(
+coord[randInt]
+)});
+  main.variable(observer()).define(["colors","dataLabels","randInt"], function(colors,dataLabels,randInt){return(
+colors[dataLabels[randInt]]
+)});
+  main.variable(observer("tsnePlot")).define("tsnePlot", ["d3","DOM","num_points","colors","dataLabels","coord"], function(d3,DOM,num_points,colors,dataLabels,coord){return(
+function tsnePlot() {
+    const m=20;
+    var margin={top:m,right:m,bottom:m,left:m},
+        width=600-margin.left-margin.right,
+        height=600-margin.top-margin.bottom;
+    var xScale=d3.scaleLinear().domain([0,1])
+                 .range([0,width]),
+        yScale=d3.scaleLinear().domain([0,1])
+                  .range([height,0]);
+    const svg=d3.select(DOM.svg(width,height))
+                .attr('style','background:whitesmoke');
+    for (var i=1; i<num_points; i++) {
+        var col=colors[dataLabels[i]];
+        svg.append('circle').datum(coord[i])
+           .attr('r',1)
+           .attr('cx',d=>xScale(d.x))
+           .attr('cy',d=>yScale(d.y))
+           .attr('fill',col);};
+    return svg.node();}
+)});
+  main.variable(observer()).define(["tsnePlot"], function(tsnePlot){return(
+tsnePlot()
+)});
+  main.variable(observer("d3")).define("d3", ["require"], function(require){return(
+require('d3@6')
 )});
   return main;
 }
