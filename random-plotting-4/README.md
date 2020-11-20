@@ -1,6 +1,6 @@
 # 📑 Random Plotting 4
 
-https://observablehq.com/@olgabelitskaya/random-plotting-4@101
+https://observablehq.com/@olgabelitskaya/random-plotting-4@129
 
 View this notebook in your browser by running a web server in this folder. For
 example:

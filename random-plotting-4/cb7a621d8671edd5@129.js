@@ -1,4 +1,4 @@
-// https://observablehq.com/@olgabelitskaya/random-plotting-4@101
+// https://observablehq.com/@olgabelitskaya/random-plotting-4@129
 export default function define(runtime, observer) {
   const main = runtime.module();
   main.variable(observer()).define(["md"], function(md){return(
@@ -31,7 +31,7 @@ function fy(a,b,c,d,e,q,n,t,k) {
 )});
   main.variable(observer("make_data")).define("make_data", ["d3","fx","fy"], function(d3,fx,fy){return(
 function make_data(a,b,c,d,e,q,n,k) {
-    return d3.range(1,2*n+1).map(function(t) {
+    return d3.range(1,2*n+2).map(function(t) {
         return {'x':fx(a,b,c,d,e,q,n,t,k),
                 'y':fy(a,b,c,d,e,q,n,t,k)}; }); }
 )});
@@ -44,29 +44,42 @@ function randcolGB(i) {
 function RandomPlot() {
     const m=20;
     var margin={top:m,right:m,bottom:m,left:m},
-        width=600-margin.left-margin.right,
+        width=800-margin.left-margin.right,
         height=600-margin.top-margin.bottom;
     const a=randi(3,11),b=randi(3,25),c=randi(8,16),
           d=randi(5,9),e=randi(200,300),
           q=randi(2,10),n=randi(30,300);
-    var xScale=d3.scaleLinear().domain([-1.8*(a+.1*b),1.8*(a+.1*b)])
+    var xScale=d3.scaleLinear().domain([-1.5*(a+.1*b),1.5*(a+.1*b)])
                  .range([0,width]),
-        yScale=d3.scaleLinear().domain([-.5*(a+.1*b),3*(a+.1*b)])
+        yScale=d3.scaleLinear().domain([-.5*(a+.1*b),2*(a+.1*b)])
                   .range([height,0]);
     const svg=d3.select(DOM.svg(width,height))
                 .attr('style','background:whitesmoke');
     var line=d3.line().curve(d3.curveMonotoneX)
                .x(function(d){return xScale(d.x);})
                .y(function(d){return yScale(d.y);});
-    for (var i=0; i<2*q+1; i++) {
+    svg.append('path').datum(make_data(a,b,c,d,e,q,n,1))
+           .attr('class','line').attr('d',line)
+           .attr('stroke',randcolGB(1))
+           .attr('stroke-width',.3)
+           .attr('fill','none');
+    function addLine(i) {
         var data=make_data(a,b,c,d,e,q,n,i),
             col=randcolGB(i);
         svg.append('path').datum(data)
            .attr('class','line').attr('d',line)
-           .attr('stroke',col).attr('stroke-width',.3)
+           .attr('stroke',col).attr('stroke-width',.5)
            .attr('fill','none');};
     svg.append('text').text('[a,b,c,d,e,q,n]='+[a,b,c,d,e,q,n])
-       .attr('x',width/4).attr('y',2*m)
+       .attr('x',width/2).attr('y',2*m);
+    svg.append('text').text('<<< add a new line')
+    .attr('x',3*m).attr('y',2*m);
+    svg.append('circle')
+       .attr('cx',2*m).attr('cy',2*m)
+       .attr('r',15).attr('fill','#3699ff')
+       .on('click',function() {
+            var randK=Math.floor((2*q+2)*Math.random())
+            addLine(randK);})
     return svg.node();}
 )});
   main.variable(observer()).define(["RandomPlot"], function(RandomPlot){return(
