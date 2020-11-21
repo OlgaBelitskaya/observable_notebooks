@@ -1,4 +1,4 @@
-// https://observablehq.com/@olgabelitskaya/random-plotting-5@323
+// https://observablehq.com/@olgabelitskaya/random-plotting-5@329
 export default function define(runtime, observer) {
   const main = runtime.module();
   main.variable(observer()).define(["md"], function(md){return(
@@ -58,7 +58,7 @@ function RandomPlot(data,coef,col) {
                .x(function(d){return xScale(d.x);})
                .y(function(d){return yScale(d.y);});
     svg.append('path').datum(data)
-       .transition().duration(3000)
+       .transition().duration(10000)
        .attr('class','line').attr('d',line)
        .attr('stroke',col).attr('stroke-width',.5)
        .attr('fill',col).attr('fill-opacity',.1);
@@ -100,8 +100,8 @@ svg.append('circle')
     .attr('r',20).attr('fill','#36ffff')
     .attr('stroke','silver').attr('stroke-width',5)
     .on('click',function() {
-        d3.selectAll('#plot_text').remove();
-        d3.selectAll('path').remove();
+        d3.selectAll('#plot_text').transition().duration(3000).remove();
+        d3.selectAll('path').transition().duration(3000).remove();
         var array=make_data(),col=randcol();
         RandomPlot(array[0],array[1],col);})
 )});
