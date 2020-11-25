@@ -1,4 +1,4 @@
-// https://observablehq.com/@olgabelitskaya/dataframe-html-experiments@369
+// https://observablehq.com/@olgabelitskaya/dataframe-html-experiments@379
 export default function define(runtime, observer) {
   const main = runtime.module();
   main.variable(observer()).define(["md"], function(md){return(
@@ -44,8 +44,8 @@ Object.entries(tr_data).slice(2,8).map(
                   .attr('transform',legend_trans)
                   .call(d3Legend.legendColor()
                   .shape('circle').shapeRadius(8)
-                  .shapePadding(100).orient('vertical')
-                  .labelAlign('center').labelOffset('10')
+                  .shapePadding(60).orient('vertical')
+                  .labelAlign('center').labelOffset('20')
                   .scale(d3.scaleOrdinal()
                            .domain(['median','mean'])
                            .range([col1, col2])));
@@ -74,13 +74,13 @@ Object.assign(...Object.keys(data[0])
 )});
   main.variable(observer("x")).define("x", ["d3","db_data","margin","width"], function(d3,db_data,margin,width){return(
 d3.scaleLinear()
-  .domain([0,d3.max(db_data,d=>d.median_mean[1])])
-  .range([margin.left,width-margin.right])
+    .domain([0,d3.max(db_data,d=>d.median_mean[1])])
+    .range([margin.left,width-margin.right])
 )});
   main.variable(observer("y")).define("y", ["d3","db_data","margin","height"], function(d3,db_data,margin,height){return(
 d3.scalePoint()
-  .domain(db_data.map(d=>d.name))
-  .rangeRound([margin.top,height-margin.bottom])
+    .domain(db_data.map(d=>d.name))
+    .rangeRound([margin.top,height-margin.bottom])
 )});
   main.variable(observer("xAxis")).define("xAxis", ["margin","height","d3","x","width"], function(margin,height,d3,x,width){return(
 g=>g
