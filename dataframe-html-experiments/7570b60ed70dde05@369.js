@@ -1,4 +1,4 @@
-// https://observablehq.com/@olgabelitskaya/dataframe-html-experiments@326
+// https://observablehq.com/@olgabelitskaya/dataframe-html-experiments@369
 export default function define(runtime, observer) {
   const main = runtime.module();
   main.variable(observer()).define(["md"], function(md){return(
@@ -9,17 +9,18 @@ Object.entries(tr_data).slice(2,8).map(
   el=>({'name':el[0],
         'median_mean':[d3.median(el[1]),d3.mean(el[1])]}))
 )});
-  main.variable(observer("chart")).define("chart", ["d3","width","height","margin","db_data","x","y","d3Legend"], function*(d3,width,height,margin,db_data,x,y,d3Legend)
+  main.variable(observer("chart")).define("chart", ["d3","width","height","margin","xAxis","yAxis","db_data","x","y","d3Legend"], function*(d3,width,height,margin,xAxis,yAxis,db_data,x,y,d3Legend)
 {
   const col1='#36ff36',col2='#3636ff';  
   const svg=d3.create('svg').attr('style','background:whitesmoke')
               .attr('viewBox',[0,0,1.2*width,1.2*height]);
-  const title=svg.append('g').attr('class','chart-title')
-                 .append('text').attr('text-anchor','middle')
+  svg.append('g').append('text').attr('text-anchor','middle')
                  .attr('x',(width+margin.left)/2)
-                 .attr('y',margin.top)
+                 .attr('y',height+margin.bottom+margin.top)
                  .style('font-size','24px')
                  .text('Median & Mean Values');
+  svg.append('g').call(xAxis).style('font-size','12px');
+  svg.append('g').call(yAxis).style('font-size','12px');
   const lines=svg.append('g').attr('class','lines')
                  .attr('transform',`translate(0,${margin.top})`)
                  .selectAll('line').data(db_data).join('line')
@@ -31,18 +32,19 @@ Object.entries(tr_data).slice(2,8).map(
   const dots=svg.append('g').attr('class','dots')
                 .attr('transform',`translate(0,${margin.top})`)
                 .selectAll('circle').data(db_data).join('circle')
-                .attr('fill',col1).attr('r',6)
+                .attr('fill',col1).attr('r',8)
                 .attr('cx',d=>x(d.median_mean[0]))
                 .attr('cy',d=>y(d.name))
                 .clone(true)
                 .attr('cx',d=>x(d.median_mean[1]))
                 .attr('fill',col2);
-  const trans=`translate(${width-margin.right},${height-margin.bottom})`;
+  const legend_trans=`translate(${width+margin.right}`
+                     .concat(`,${height/2-margin.bottom})`);
   const legend=svg.append('g').attr('class','legend')
-                  .attr('transform',trans)
+                  .attr('transform',legend_trans)
                   .call(d3Legend.legendColor()
-                  .shape('circle').shapeRadius(6)
-                  .shapePadding(100).orient('horizontal')
+                  .shape('circle').shapeRadius(8)
+                  .shapePadding(100).orient('vertical')
                   .labelAlign('center').labelOffset('10')
                   .scale(d3.scaleOrdinal()
                            .domain(['median','mean'])
@@ -56,7 +58,7 @@ Object.entries(tr_data).slice(2,8).map(
 400
 )});
   main.variable(observer("margin")).define("margin", function(){return(
-{top:20,right:20,bottom:20,left:80}
+{top:20,right:20,bottom:20,left:120}
 )});
   main.variable(observer("url")).define("url", function(){return(
 'https://raw.githubusercontent.com/OlgaBelitskaya/'
@@ -79,6 +81,22 @@ d3.scaleLinear()
 d3.scalePoint()
   .domain(db_data.map(d=>d.name))
   .rangeRound([margin.top,height-margin.bottom])
+)});
+  main.variable(observer("xAxis")).define("xAxis", ["margin","height","d3","x","width"], function(margin,height,d3,x,width){return(
+g=>g
+    .attr('transform',
+          `translate(${margin.left}),${height-margin.bottom})`)
+    .call(d3.axisBottom(x).ticks(.02*width).tickSizeOuter(0))
+    .call(g=>g.select('.domain').remove())
+)});
+  main.variable(observer("yAxis")).define("yAxis", ["margin","d3","y","db_data"], function(margin,d3,y,db_data){return(
+g=>g
+    .attr('transform',
+          `translate(${margin.left},${margin.top})`)
+    .call(d3.axisLeft(y))
+    .call(g=>g.select('.domain').remove())
+    .call(g=>g.select('.tick:last-of-type text')
+              .append('tspan').text(db_data.name))
 )});
   main.variable(observer("d3Legend")).define("d3Legend", ["require"], function(require){return(
 require('d3-svg-legend')
