@@ -1,0 +1,14 @@
+{
+  "name": "@olgabelitskaya/recursive-frames",
+  "main": "b64d53edf93157f0@162.js",
+  "version": "162.0.0",
+  "homepage": "https://observablehq.com/@olgabelitskaya/recursive-frames",
+  "author": {
+    "name": "Olga Belitskaya",
+    "url": "https://observablehq.com/@olgabelitskaya"
+  },
+  "type": "module",
+  "peerDependencies": {
+    "@observablehq/runtime": "4"
+  }
+}
