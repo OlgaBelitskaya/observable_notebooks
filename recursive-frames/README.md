@@ -1,6 +1,6 @@
 # 📑 Recursive Frames
 
-https://observablehq.com/@olgabelitskaya/recursive-frames@162
+https://observablehq.com/@olgabelitskaya/recursive-frames@188
 
 View this notebook in your browser by running a web server in this folder. For
 example:
