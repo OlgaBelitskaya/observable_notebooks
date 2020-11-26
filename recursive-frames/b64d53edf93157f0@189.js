@@ -1,4 +1,4 @@
-// https://observablehq.com/@olgabelitskaya/recursive-frames@188
+// https://observablehq.com/@olgabelitskaya/recursive-frames@189
 export default function define(runtime, observer) {
   const main = runtime.module();
   main.variable(observer()).define(["md"], function(md){return(
@@ -11,7 +11,7 @@ background-color:whitesmoke; text-align:center;'>`
 )});
   main.variable(observer("n")).define("n", ["Generators", "viewof n"], (G, _) => G.input(_));
   main.variable(observer("viewof m")).define("viewof m", ["html"], function(html){return(
-html`<input type='number' id='n_frames' value=7
+html`<input type='number' id='m_frames' value=7
 style='width:200px; font-size:120%; color:#363636;
 background-color:whitesmoke; text-align:center;'>`
 )});
