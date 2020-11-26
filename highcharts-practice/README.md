@@ -1,6 +1,6 @@
 # 📑 Highcharts' Practice
 
-https://observablehq.com/@olgabelitskaya/highcharts-practice@124
+https://observablehq.com/@olgabelitskaya/highcharts-practice@138
 
 View this notebook in your browser by running a web server in this folder. For
 example:

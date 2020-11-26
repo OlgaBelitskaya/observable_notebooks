@@ -1,4 +1,4 @@
-// https://observablehq.com/@olgabelitskaya/highcharts-practice@124
+// https://observablehq.com/@olgabelitskaya/highcharts-practice@138
 export default function define(runtime, observer) {
   const main = runtime.module();
   main.variable(observer()).define(["md"], function(md){return(
@@ -38,6 +38,24 @@ Object.assign(...Object.keys(customers[0])
   main.variable(observer()).define(["md"], function(md){return(
 md`## Line Charts`
 )});
+  main.variable(observer("viewof n")).define("viewof n", ["html"], function(html){return(
+html`<input type='number' id='n_lines' value=3
+style='width:200px; font-size:120%; color:#363636;
+background-color:whitesmoke; text-align:center;'>`
+)});
+  main.variable(observer("n")).define("n", ["Generators", "viewof n"], (G, _) => G.input(_));
+  main.variable(observer("line_chart")).define("line_chart", ["html","randi","Highcharts","n","make_data"], function(html,randi,Highcharts,n,make_data)
+{
+  const figure=html`<div id='line' style='width:600px; height:650px;'>`;
+  const a=randi(5,15),b=randi(8,48);
+  Highcharts.chart(figure, {
+    chart:{type:'line',backgroundColor:'whitesmoke'},
+    xAxis:{title:{text:'x'}},yAxis:{title:{text:'y'}},
+    title:{text:'a,b,n =>>> '+[a,b,n]},
+    credits:{enabled:false},legend:{enabled:false},
+    series:make_data(n,a,b)});
+  return figure;}
+);
   main.variable(observer("randi")).define("randi", function(){return(
 function randi(min,max) {
   return Math.floor(Math.random()*(max-min+1))+min;}
@@ -61,18 +79,6 @@ function make_data(k,a,b) {
     series.push({name:i,color:randcol(i),lineWidth:.5,data:arr(i,a,b)});};
   return series}
 )});
-  main.variable(observer("line_chart")).define("line_chart", ["html","randi","Highcharts","make_data"], function(html,randi,Highcharts,make_data)
-{
-  const figure=html`<div id='line' style='width:600px; height:650px;'>`;
-  const a=randi(5,15),b=randi(8,48);
-  Highcharts.chart(figure, {
-    chart:{type:'line',backgroundColor:'white'},
-    xAxis:{title:{text:'x'}},yAxis:{title:{text:'y'}},
-    title:{text:'Random Parameters: a,b = '+[a,b]},
-    credits:{enabled:false},legend:{enabled:false},
-    series:make_data(6,a,b)});
-  return figure;}
-);
   main.variable(observer()).define(["md"], function(md){return(
 md`## Modules`
 )});
