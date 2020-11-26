@@ -1,0 +1,14 @@
+{
+  "name": "@olgabelitskaya/highcharts-practice",
+  "main": "97bf77fab3ae7e54@53.js",
+  "version": "53.0.0",
+  "homepage": "https://observablehq.com/@olgabelitskaya/highcharts-practice",
+  "author": {
+    "name": "Olga Belitskaya",
+    "url": "https://observablehq.com/@olgabelitskaya"
+  },
+  "type": "module",
+  "peerDependencies": {
+    "@observablehq/runtime": "4"
+  }
+}
