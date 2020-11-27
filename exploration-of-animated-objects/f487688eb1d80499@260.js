@@ -1,20 +1,25 @@
-// https://observablehq.com/@olgabelitskaya/exploration-of-animated-objects@222
+// https://observablehq.com/@olgabelitskaya/exploration-of-animated-objects@260
 export default function define(runtime, observer) {
   const main = runtime.module();
   main.variable(observer()).define(["md"], function(md){return(
 md`# 📑 Exploration of Animated Objects`
 )});
   main.variable(observer()).define(["md"], function(md){return(
-md`## 🤖 MD Cells`
+md`## 🤖 Markdown Cells & HTML Headers`
 )});
   main.variable(observer()).define(["md","d3","now"], function(md,d3,now)
-{const md_cell1=md`🌈 Rainbow Interpolation for MD`;
+{const md_cell1=md`🌈 Color Interpolation for Markdown Cells`;
  md_cell1.style.color=d3.interpolateRainbow(now/1000);
  return md_cell1;}
 );
   main.variable(observer()).define(["md","now"], function(md,now){return(
 md`### 🕒 ${new Date(now).toLocaleString()}`
 )});
+  main.variable(observer()).define(["html","d3","now"], function(html,d3,now)
+{const html_header=html`<h4>🌈 Color Interpolation for HTML Headers</h4>`;
+ html_header.style.color=d3.interpolateRainbow(now/3000);
+ return html_header}
+);
   main.variable(observer()).define(["md"], function(md){return(
 md`## 🤖 Charts`
 )});
@@ -28,7 +33,8 @@ md`## 🤖 Charts`
 'Fresh'
 )});
   main.variable(observer("viewof play_button_1")).define("viewof play_button_1", ["html"], function(html){return(
-html`<button>run</button>`
+html`
+<button style='background:silver; width:100px'>RUN</button>`
 )});
   main.variable(observer("play_button_1")).define("play_button_1", ["Generators", "viewof play_button_1"], (G, _) => G.input(_));
   main.variable(observer()).define(["play_button_1","customers"], function*(play_button_1,customers)
@@ -59,7 +65,7 @@ d3.scaleLinear()
 )});
   main.variable(observer("y")).define("y", ["d3","tr_customers","field","height","margin"], function(d3,tr_customers,field,height,margin){return(
 d3.scaleLinear()
-    .domain([0,d3.max(tr_customers[field])])
+    .domain([0,d3.max(tr_customers[`${field}`])])
     .range([height-margin.bottom,margin.top])
 )});
   main.variable(observer("xAxis")).define("xAxis", ["x","height","margin","d3","width"], function(x,height,margin,d3,width){return(
@@ -75,7 +81,7 @@ d3.scaleLinear()
 )});
   main.variable(observer("line")).define("line", ["d3","x","y","field"], function(d3,x,y,field){return(
 d3.line().x(function(d,i) {return x(i);})
-              .y(function(d) {return y(d[field]);})
+              .y(function(d) {return y(d[`${field}`]);})
 )});
   main.variable(observer()).define(["md"], function(md){return(
 md`## 🤖 Modules & Data`
