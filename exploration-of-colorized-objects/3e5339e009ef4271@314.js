@@ -1,4 +1,4 @@
-// https://observablehq.com/@olgabelitskaya/exploration-of-colorized-objects@293
+// https://observablehq.com/@olgabelitskaya/exploration-of-colorized-objects@314
 export default function define(runtime, observer) {
   const main = runtime.module();
   main.variable(observer()).define(["md"], function(md){return(
@@ -56,6 +56,27 @@ function animated_line(values,width=100,height=50) {
   context.strokeStyle=d3.interpolateSinebow(now/6000);
   context.beginPath(),line(values),context.stroke(); 
   return context.canvas;}
+)});
+  main.variable(observer()).define(["html"], function(html){return(
+html`<style>
+.emo {font-size:300%;}
+.trans,.comb {margin:0; color:transparent;
+              text-shadow:0 0 5px #3636ff; 
+              font-size:300%; position:relative;}
+.trans::before {content:attr(title); position:absolute; 
+                text-shadow:0 0 0 white;}   
+.comb::before {content:attr(title); position:absolute; 
+               text-shadow:0 0 0 slategray;}
+</style>
+<emoji class='trans' title='&#x1F985'>&#x1F985</emoji>
+&nbsp;<emoji class='comb' title='&#x1F985'>&#x1F3A1</emoji>
+&nbsp;<text class='emo'>&#x1F985</text> &nbsp; &nbsp;
+<emoji class='trans' title='&#x1F3A1'>&#x1F3A1</emoji>
+&nbsp;<emoji class='comb' title='&#x1F3A1'>&#x1F3A1</emoji>
+&nbsp;<text class='emo'>&#x1F3A1</text> &nbsp; &nbsp;
+<emoji class='trans' title='&#x1F3A0'>&#x1F3A0</emoji>
+&nbsp;<emoji class='comb' title='&#x1F3A0'>&#x1F3A1</emoji>
+<text class='emo'>&#x1F3A0</text>`
 )});
   main.variable(observer()).define(["md"], function(md){return(
 md`## 🤖 SVG Elements`
