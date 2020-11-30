@@ -1,4 +1,4 @@
-// https://observablehq.com/@olgabelitskaya/exploration-of-colorized-objects@288
+// https://observablehq.com/@olgabelitskaya/exploration-of-colorized-objects@293
 export default function define(runtime, observer) {
   const main = runtime.module();
   main.variable(observer()).define(["md"], function(md){return(
@@ -9,9 +9,13 @@ md`## 🤖 Markdown Cells & HTML Elements`
 )});
   main.variable(observer()).define(["md","colorized_text","canvas_text","animated_line","sample_data","make_data"], function(md,colorized_text,canvas_text,animated_line,sample_data,make_data){return(
 md`### Graphics & Text Examples: 
-* ${colorized_text('hello')} - a text row;
+
+* ${colorized_text('color interpolation')} - a text row;
+
 * ${canvas_text('color gradient')} - a canvas text;
+
 * ${animated_line(sample_data)} - a chart inline;
+
 * ${animated_line(make_data(60))} - an animated chart inline;
 <br/><br/>`
 )});
@@ -25,7 +29,7 @@ make_data(60)
   main.variable(observer("colorized_text")).define("colorized_text", ["html","d3","now"], function(html,d3,now){return(
 function colorized_text(string) {
   const t=html`<text style='font-family:Verdana; 
-                 font-size:24px;'>${string}</text>`;
+                 font-size:22px;'>${string}</text>`;
   t.style.color=d3.interpolateSinebow(now/3000);
   return t;}
 )});
