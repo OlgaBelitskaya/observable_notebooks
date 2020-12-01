@@ -1,6 +1,6 @@
 # 📑 Exploration of Animated Objects
 
-https://observablehq.com/@olgabelitskaya/exploration-of-animated-objects@316
+https://observablehq.com/@olgabelitskaya/exploration-of-animated-objects@376
 
 View this notebook in your browser by running a web server in this folder. For
 example:

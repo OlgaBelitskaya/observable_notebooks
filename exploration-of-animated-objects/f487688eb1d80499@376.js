@@ -1,4 +1,4 @@
-// https://observablehq.com/@olgabelitskaya/exploration-of-animated-objects@316
+// https://observablehq.com/@olgabelitskaya/exploration-of-animated-objects@376
 export default function define(runtime, observer) {
   const main = runtime.module();
   main.variable(observer()).define(["md"], function(md){return(
@@ -11,6 +11,16 @@ md`## 🤖 Markdown Cells & HTML Headers`
 {const md_cell1=md`### 🌈 Color Interpolation for Markdown Cells`;
  md_cell1.style.color=d3.interpolateRainbow(now/1000);
  return md_cell1;}
+);
+  main.variable(observer()).define(["html","randemo"], function(html,randemo){return(
+html`<div width=900 height=100><p>${randemo}</p></div>`
+)});
+  main.variable(observer("randemo")).define("randemo", ["d3","Promises"], async function*(d3,Promises)
+{while (true) {
+    yield d3.shuffle([...'🐀🐁🐂🐃🐄🐅🐆🐇🐈🐉🐊🐋🐌🐍🐎🐏🐐🐑🐒🐓🐔🐕🐖🐗🐘🐙🐚🐛🐜🐝🐞🐟'].slice())
+            .slice(Math.floor(Math.random()*30)+1)
+            .sort(d3.ascending);
+    await Promises.delay(2000)}; }
 );
   main.variable(observer()).define(["md","now"], function(md,now){return(
 md`### 🕒 ${new Date(now).toLocaleString()}`
