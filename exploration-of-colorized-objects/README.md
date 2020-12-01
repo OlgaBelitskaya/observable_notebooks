@@ -1,6 +1,6 @@
 # 📑 Exploration of Colorized Objects
 
-https://observablehq.com/@olgabelitskaya/exploration-of-colorized-objects@314
+https://observablehq.com/@olgabelitskaya/exploration-of-colorized-objects@346
 
 View this notebook in your browser by running a web server in this folder. For
 example:

@@ -1,4 +1,4 @@
-// https://observablehq.com/@olgabelitskaya/exploration-of-colorized-objects@314
+// https://observablehq.com/@olgabelitskaya/exploration-of-colorized-objects@346
 export default function define(runtime, observer) {
   const main = runtime.module();
   main.variable(observer()).define(["md"], function(md){return(
@@ -7,16 +7,20 @@ md`# 📑 Exploration of Colorized Objects`
   main.variable(observer()).define(["md"], function(md){return(
 md`## 🤖 Markdown Cells & HTML Elements`
 )});
-  main.variable(observer()).define(["md","colorized_text","canvas_text","animated_line","sample_data","make_data"], function(md,colorized_text,canvas_text,animated_line,sample_data,make_data){return(
+  main.variable(observer()).define(["md","colorized_text","highlighted_text","canvas_text","animated_line","sample_data","make_data","canvas_circle"], function(md,colorized_text,highlighted_text,canvas_text,animated_line,sample_data,make_data,canvas_circle){return(
 md`### Graphics & Text Examples: 
 
 * ${colorized_text('color interpolation')} - a text row;
+
+* ${highlighted_text('highlight interpolation')} - another text row;
 
 * ${canvas_text('color gradient')} - a canvas text;
 
 * ${animated_line(sample_data)} - a chart inline;
 
 * ${animated_line(make_data(60))} - an animated chart inline;
+
+* ${canvas_circle(4,8)} - canvas drawing.
 <br/><br/>`
 )});
   main.variable(observer("make_data")).define("make_data", ["d3"], function(d3){return(
@@ -25,6 +29,17 @@ function make_data(n) {
 )});
   main.variable(observer("sample_data")).define("sample_data", ["make_data"], function(make_data){return(
 make_data(60)
+)});
+  main.variable(observer("highlighted_text")).define("highlighted_text", ["html","d3","now"], function(html,d3,now){return(
+function highlighted_text(string) {
+  const t=html`
+    <style>
+      .highlight {color:white; 
+                  font-size:22px; font-family:Verdana;}
+    </style>
+    <text class='highlight'>${string}</text>`;
+  t.style.background=d3.interpolateSinebow(now/3000);
+  return t;}
 )});
   main.variable(observer("colorized_text")).define("colorized_text", ["html","d3","now"], function(html,d3,now){return(
 function colorized_text(string) {
@@ -43,6 +58,17 @@ function canvas_text(string,width=170,height=50) {
   gradient.addColorStop('1.','#ff3636');
   context.strokeStyle=gradient;
   context.strokeText(string,0,30);
+  return context.canvas;}
+)});
+  main.variable(observer("canvas_circle")).define("canvas_circle", ["DOM","now","d3"], function(DOM,now,d3){return(
+function canvas_circle(r,k) {
+  const context=DOM.context2d(2*r*k,2*r*k);
+  for (let radius=r; radius<r*k; radius+=r) {
+    context.beginPath();
+    context.arc(r*k,r*k,radius,0,2*Math.PI);
+    context.stroke();
+    const coef=radius/(2*r*k)+now/1000
+    context.strokeStyle=d3.interpolateSinebow(coef);}
   return context.canvas;}
 )});
   main.variable(observer("animated_line")).define("animated_line", ["d3","DOM","now"], function(d3,DOM,now){return(
