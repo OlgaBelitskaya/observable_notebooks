@@ -1,4 +1,4 @@
-// https://observablehq.com/@olgabelitskaya/exploration-of-colorized-objects@346
+// https://observablehq.com/@olgabelitskaya/exploration-of-colorized-objects@406
 export default function define(runtime, observer) {
   const main = runtime.module();
   main.variable(observer()).define(["md"], function(md){return(
@@ -67,7 +67,7 @@ function canvas_circle(r,k) {
     context.beginPath();
     context.arc(r*k,r*k,radius,0,2*Math.PI);
     context.stroke();
-    const coef=radius/(2*r*k)+now/1000
+    const coef=radius/(2*r*k)+now/3000
     context.strokeStyle=d3.interpolateSinebow(coef);}
   return context.canvas;}
 )});
@@ -106,6 +106,29 @@ html`<style>
 )});
   main.variable(observer()).define(["md"], function(md){return(
 md`## 🤖 SVG Elements`
+)});
+  main.variable(observer("randl")).define("randl", ["d3","Promises"], async function*(d3,Promises)
+{while (true) {
+    yield d3.shuffle([...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'].slice())
+      .slice(Math.floor(Math.random()*10)+1)
+      .sort(d3.ascending);
+    await Promises.delay(3000);};}
+);
+  main.variable(observer("letter_chart")).define("letter_chart", ["d3"], function(d3)
+{
+  const svg=d3.create('svg').attr('viewBox',[0,0,600,60])
+              .attr('font-family','Verdana').attr('font-size',10)
+              .style('display','block');
+  let text=svg.selectAll('text');
+  return Object.assign(svg.node(),{
+    update(letters) {
+      text=text.data(letters).join('text').text(d=>d)
+               .attr('x',(d,i)=>i*20).attr('y',30)
+               .style('fill',d3.interpolateTurbo(
+                 letters.length/30))}});}
+);
+  main.variable(observer()).define(["letter_chart","randl"], function(letter_chart,randl){return(
+letter_chart.update(randl)
 )});
   main.variable(observer()).define(["d3","n"], function(d3,n){return(
 d3.create('svg').attr('width',256).attr('height',256)
