@@ -1,0 +1,14 @@
+{
+  "name": "@olgabelitskaya/exploration-of-graphs",
+  "main": "2acb2ee56022973c@113.js",
+  "version": "113.0.0",
+  "homepage": "https://observablehq.com/@olgabelitskaya/exploration-of-graphs",
+  "author": {
+    "name": "Olga Belitskaya",
+    "url": "https://observablehq.com/@olgabelitskaya"
+  },
+  "type": "module",
+  "peerDependencies": {
+    "@observablehq/runtime": "4"
+  }
+}
