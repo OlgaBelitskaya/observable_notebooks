@@ -1,6 +1,6 @@
 # 📑 Text Styling
 
-https://observablehq.com/@olgabelitskaya/text-styling@233
+https://observablehq.com/@olgabelitskaya/text-styling@270
 
 View this notebook in your browser by running a web server in this folder. For
 example:

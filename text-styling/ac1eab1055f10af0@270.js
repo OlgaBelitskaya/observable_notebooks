@@ -1,4 +1,4 @@
-// https://observablehq.com/@olgabelitskaya/text-styling@233
+// https://observablehq.com/@olgabelitskaya/text-styling@270
 export default function define(runtime, observer) {
   const main = runtime.module();
   main.variable(observer()).define(["md"], function(md){return(
@@ -25,7 +25,7 @@ ${string}</div></div>`
 )});
   main.variable(observer("params")).define("params", function(){return(
 {background_color:'darkslategray',padding:5,
-         font_family:'Akronim',font_width:500,
+         font_family:'Akronim',font_width:200,
          font_color:'transparent',
          font_size_px:36,font_view_height:1.7}
 )});
@@ -57,6 +57,34 @@ function canvas_text(string_array,width=900,height=300,
  return context.canvas;}
 )});
   main.variable(observer()).define(["md"], function(md){return(
+md`## svg random sequences`
+)});
+  main.variable(observer("randcorpus")).define("randcorpus", ["d3","corpus","Promises"], async function*(d3,corpus,Promises)
+{while (true) {
+    yield d3.shuffle([...corpus].slice())
+            .slice(Math.floor(Math.random()*10)+1)
+            .sort(d3.ascending);
+    await Promises.delay(3000);};}
+);
+  main.variable(observer("letter_chart")).define("letter_chart", ["d3","corpus"], function(d3,corpus)
+{
+  const svg=d3.create('svg')
+  return Object.assign(svg.node(),{
+    update(letters) {
+      const height=20*letters.length+25;
+      svg.attr('viewBox',[0,0,600,height])
+          .attr('font-family','Verdana').attr('font-size',10)
+          .style('display','block');
+      let text=svg.selectAll('text');
+      text=text.data(letters).join('text').text(d=>d)
+               .attr('x',20).attr('y',(d,i)=>(i+1)*20)
+               .style('fill',d3.interpolateTurbo(
+                 letters.length/corpus.length))}});}
+);
+  main.variable(observer()).define(["letter_chart","randcorpus"], function(letter_chart,randcorpus){return(
+letter_chart.update(randcorpus)
+)});
+  main.variable(observer()).define(["md"], function(md){return(
 md`## text`
 )});
   main.variable(observer("corpus")).define("corpus", function(){return(
@@ -74,6 +102,9 @@ md`## text`
 )});
   main.variable(observer("string")).define("string", ["corpus"], function(corpus){return(
 corpus.join(' ')
+)});
+  main.variable(observer("d3")).define("d3", ["require"], function(require){return(
+require('d3@6')
 )});
   return main;
 }
