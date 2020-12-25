@@ -1,6 +1,6 @@
 # 📑 Scatter Zoom
 
-https://observablehq.com/@olgabelitskaya/scatter-zoom@240
+https://observablehq.com/@olgabelitskaya/scatter-zoom@358
 
 View this notebook in your browser by running a web server in this folder. For
 example:

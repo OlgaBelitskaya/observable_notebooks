@@ -1,4 +1,4 @@
-// https://observablehq.com/@olgabelitskaya/scatter-zoom@240
+// https://observablehq.com/@olgabelitskaya/scatter-zoom@358
 export default function define(runtime, observer) {
   const main = runtime.module();
   main.variable(observer()).define(["md"], function(md){return(
@@ -6,13 +6,14 @@ md`# 📑 Scatter Zoom`
 )});
   main.variable(observer("viewof transform")).define("viewof transform", ["html","transforms","invalidation"], function(html,transforms,invalidation)
 {
-  const form=html`<form style='font:14px var(--sans-serif); display:flex; height:35px; align-items:center;'>
+  const form=html`<form style='display:flex; height:50px; align-items:center;'>
   ${transforms.map(([name,transform],i)=>
-                   html`<label style='margin-right:1em; display:inline-flex; align-items:center;'>
-    <input type='radio' name='radio' value='${i}' style='margin-right:1em;' 
-    ${i===0 ? 'checked':''}>${name}</label>`)}</form>`;
+    html`<label style='color:slategray; text-shadow:3px 3px 3px #999; margin-right:1em;
+                       font:16px times; display:inline-flex; align-items:center;'>
+    <input type='radio' name='radio' value='${i}'${i===0 ? 'checked':''}>
+    🕸 &nbsp;${name}</label>`)}</form>`;
   const timeout=setInterval(()=>{
-    form.value = transforms[form.radio.value=(+form.radio.value+1)%transforms.length][1];
+    form.value=transforms[form.radio.value=(+form.radio.value+2)%transforms.length][1];
     form.dispatchEvent(new CustomEvent('input'));},3000);
   form.onchange=()=>form.dispatchEvent(new CustomEvent('input'));
   form.oninput=event=>{ 
@@ -52,7 +53,7 @@ chart.update(transform)
     const [y1,y0]=d3.extent(data,d=>d[1]).map(y);
     const k=.8*Math.min(width/(x1-x0),height/(y1-y0));
     const tx=(width-k*(x0+x1))/2,ty=(height-k*(y0+y1))/2;
-    return [`function ${key}`,d3.zoomIdentity.translate(tx,ty).scale(k)];
+    return [`function ${key+1}`,d3.zoomIdentity.translate(tx,ty).scale(k)];
 }))
 )});
   main.variable(observer("x")).define("x", ["d3","width"], function(d3,width){return(
@@ -71,7 +72,7 @@ function randi(xmin,xmax){
 )});
   main.variable(observer("make_data")).define("make_data", ["randi","d3"], function(randi,d3){return(
 function make_data(j,dx,dy,num) {
-     const a=randi(5,9),b=randi(10,14),d=2*Math.PI/num;
+     const a=randi(5,11),b=randi(12,36),d=2*Math.PI/num;
      return d3.range(0,num).map(function(i) {
         return [Math.cos(d*i)+Math.cos(a*d*i)/2+Math.sin((a+b)*d*i)/3+dx,
                 Math.sin(d*i)+Math.sin(a*d*i)/2+Math.cos((a+b)*d*i)/3+dy,
@@ -80,8 +81,8 @@ function make_data(j,dx,dy,num) {
   main.variable(observer("data")).define("data", ["make_data"], function(make_data)
 {
   const num=1280;
-  return [].concat(make_data(0,3,2,num),make_data(1,-3,2,num),
-                   make_data(2,-3,-2,num),make_data(3,3,-2,num))}
+  return [].concat(make_data(0,3,2,3*num),make_data(1,-3,2,num),
+                   make_data(2,-3,-2,3*num),make_data(3,3,-2,num))}
 );
   main.variable(observer("xAxis")).define("xAxis", ["height","d3"], function(height,d3){return(
 (g,x)=>g
