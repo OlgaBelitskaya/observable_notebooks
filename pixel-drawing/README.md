@@ -1,6 +1,6 @@
 # 📑 Pixel Drawing
 
-https://observablehq.com/@olgabelitskaya/pixel-drawing@73
+https://observablehq.com/@olgabelitskaya/pixel-drawing@135
 
 View this notebook in your browser by running a web server in this folder. For
 example:
