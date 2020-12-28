@@ -1,0 +1,14 @@
+{
+  "name": "@olgabelitskaya/transition-usage",
+  "main": "c5746325819641d7@243.js",
+  "version": "243.0.0",
+  "homepage": "https://observablehq.com/@olgabelitskaya/transition-usage",
+  "author": {
+    "name": "Olga Belitskaya",
+    "url": "https://observablehq.com/@olgabelitskaya"
+  },
+  "type": "module",
+  "peerDependencies": {
+    "@observablehq/runtime": "4"
+  }
+}
