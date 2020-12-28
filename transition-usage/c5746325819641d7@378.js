@@ -1,4 +1,4 @@
-// https://observablehq.com/@olgabelitskaya/transition-usage@366
+// https://observablehq.com/@olgabelitskaya/transition-usage@378
 export default function define(runtime, observer) {
   const main = runtime.module();
   main.variable(observer()).define(["md"], function(md){return(
@@ -12,8 +12,7 @@ md`# 📑 Transition Usage`
     const randi=Math.random();
     await div.transition().duration(10000).textTween(
       ()=>t=>`cat emoji ===> ${data.slice(0,Math.floor(8*t.toFixed(1)))}`)
-      .end();}
-}
+      .end();} }
 );
   main.variable(observer("data")).define("data", function(){return(
 ['😸','😹','😻','😼','😽','😾','😿','🙀']
@@ -57,15 +56,15 @@ html`<button style='width:100px; background:silver'>run</button>`
   const paths=svg.selectAll('path')
                   .data(d3.range(100).map(i=>({value:.1*i})))
                   .join('path').attr('d','M1,1l1000,0')
-                  .attr('stroke','transparent')
-                  .attr('stroke-width','2');
+                  .attr('stroke-width','1');
+  const timer=d3.timer(()=>
+        paths.attr('stroke',d3.interpolateSinebow(Date.now()/3000)));
   yield svg.node();
   while (true) {
       yield svg.node();
       await paths.transition().duration(10000)
-           .easeVarying(d=>d3.easePolyIn.exponent(d.value))
-           .attr('d','M1,999l1000,0')
-           .attr('stroke',`hsl(${Math.random()*360},100%,50%)`).end()}; }
+                 .easeVarying(d=>d3.easePolyIn.exponent(d.value))
+                 .attr('d','M1,999l1000,0').end()}; }
 );
   main.variable(observer("d3")).define("d3", ["require"], function(require){return(
 require('d3@6')
