@@ -1,4 +1,4 @@
-// https://observablehq.com/@olgabelitskaya/transition-usage@360
+// https://observablehq.com/@olgabelitskaya/transition-usage@366
 export default function define(runtime, observer) {
   const main = runtime.module();
   main.variable(observer()).define(["md"], function(md){return(
@@ -46,7 +46,7 @@ md`# 📑 Transition Usage`
                 .attr('cx',cx).end();} }
 );
   main.variable(observer("viewof run_button")).define("viewof run_button", ["html"], function(html){return(
-html`<button style='width:100;'>run</button>`
+html`<button style='width:100px; background:silver'>run</button>`
 )});
   main.variable(observer("run_button")).define("run_button", ["Generators", "viewof run_button"], (G, _) => G.input(_));
   main.variable(observer()).define(["run_button","d3","width"], async function*(run_button,d3,width)
@@ -65,8 +65,7 @@ html`<button style='width:100;'>run</button>`
       await paths.transition().duration(10000)
            .easeVarying(d=>d3.easePolyIn.exponent(d.value))
            .attr('d','M1,999l1000,0')
-           .attr('stroke',`hsl(${Math.random()*360},100%,50%)`).end()};
-  }
+           .attr('stroke',`hsl(${Math.random()*360},100%,50%)`).end()}; }
 );
   main.variable(observer("d3")).define("d3", ["require"], function(require){return(
 require('d3@6')

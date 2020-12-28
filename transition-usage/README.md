@@ -1,6 +1,6 @@
 # 📑 Transition Usage
 
-https://observablehq.com/@olgabelitskaya/transition-usage@360
+https://observablehq.com/@olgabelitskaya/transition-usage@366
 
 View this notebook in your browser by running a web server in this folder. For
 example:
