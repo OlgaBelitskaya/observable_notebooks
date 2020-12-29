@@ -1,0 +1,14 @@
+{
+  "name": "@olgabelitskaya/chart-building",
+  "main": "eb856beb4a291fb9@207.js",
+  "version": "207.0.0",
+  "homepage": "https://observablehq.com/@olgabelitskaya/chart-building",
+  "author": {
+    "name": "Olga Belitskaya",
+    "url": "https://observablehq.com/@olgabelitskaya"
+  },
+  "type": "module",
+  "peerDependencies": {
+    "@observablehq/runtime": "4"
+  }
+}
