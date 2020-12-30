@@ -1,6 +1,6 @@
-# 📑 BarChart Building
+# 📑 Chart Building
 
-https://observablehq.com/@olgabelitskaya/chart-building@207
+https://observablehq.com/@olgabelitskaya/chart-building@248
 
 View this notebook in your browser by running a web server in this folder. For
 example:

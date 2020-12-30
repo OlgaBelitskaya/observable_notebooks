@@ -1,8 +1,8 @@
-// https://observablehq.com/@olgabelitskaya/chart-building@207
+// https://observablehq.com/@olgabelitskaya/chart-building@248
 export default function define(runtime, observer) {
   const main = runtime.module();
   main.variable(observer()).define(["md"], function(md){return(
-md`# 📑 BarChart Building`
+md`# 📑 Chart Building`
 )});
   main.variable(observer("viewof font_family")).define("viewof font_family", ["html"], function(html){return(
 html`
@@ -72,6 +72,27 @@ d3.max(data)
                   color3:'slategray',percent3:67,
                   color4:'darkslategray',percent4:100}
 )});
+  main.variable(observer()).define(["html","font_family"], function(html,font_family){return(
+html`
+<style>@import 'https://fonts.googleapis.com/css?family=${font_family}';
+</style><div id='div2'></div>`
+)});
+  main.variable(observer()).define(["d3","now","data","width","font_family"], function(d3,now,data,width,font_family)
+{ var div=d3.select('#div2')
+  div.style('text-align','right')
+     .style('text-shadow','4px 4px 4px slategray')
+     .style('padding','5px')
+     .style('color',d3.interpolateSinebow(now/10000));
+  var x=d3.scaleLinear().domain([0,d3.max(data)]).range([0,.9*width])
+  div.selectAll('div').data(data).join('div')
+      .style('background','silver')
+      .style('padding','5px').style('margin','1px')
+      .style('width',d=>`${x(d)}px`)
+      .style('font-family',`${font_family}`)
+      .style('font-size','20px')
+      .text(d=>d);
+  return div.node(); }
+);
   main.variable(observer("d3")).define("d3", ["require"], function(require){return(
 require('d3@6')
 )});
