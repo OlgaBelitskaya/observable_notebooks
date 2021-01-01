@@ -1,4 +1,4 @@
-// https://observablehq.com/@olgabelitskaya/chart-building@302
+// https://observablehq.com/@olgabelitskaya/chart-building@347
 export default function define(runtime, observer) {
   const main = runtime.module();
   main.variable(observer()).define(["md"], function(md){return(
@@ -17,8 +17,9 @@ html`
 )});
   main.variable(observer("font_family")).define("font_family", ["Generators", "viewof font_family"], (G, _) => G.input(_));
   main.variable(observer("viewof font_size_px")).define("viewof font_size_px", ["html"], function(html){return(
-html`<input type='range' 
-id='n_font_size_px' value=16 min=8 max=48 style='width:200px'>`
+html`
+<input type='range' id='n_font_size_px' 
+value=16 min=8 max=48 style='width:200px'>`
 )});
   main.variable(observer("font_size_px")).define("font_size_px", ["Generators", "viewof font_size_px"], (G, _) => G.input(_));
   main.variable(observer("viewof background_color")).define("viewof background_color", ["html"], function(html){return(
@@ -85,23 +86,29 @@ html`
 <style>
 @import 'https://fonts.googleapis.com/css?family=${font_family}';
 </style>
-<div id='d3barchart'></div>`
+<div id='d3barchart'><text id='d3barchart_title'></text></div>`
 )});
-  main.variable(observer()).define(["d3","now","data","width","font_family"], function(d3,now,data,width,font_family)
+  main.variable(observer()).define(["d3","now","data","width","font_family","font_size_px"], function(d3,now,data,width,font_family,font_size_px)
 { var div=d3.select('#d3barchart')
   div.style('text-align','right')
-     .style('text-shadow','4px 4px 4px slategray')
+     .style('text-shadow','4px 4px 4px darkslategray')
      .style('padding','5px')
      .style('width','60%')
-     .style('color',d3.interpolateSinebow(now/10000))
-     .style('background',d3.interpolateSinebow(now/10000));
+     .style('color',d3.interpolateSinebow(now/30000))
+     .style('background',d3.interpolateSinebow(now/30000));
   var x=d3.scaleLinear().domain([0,d3.max(data)]).range([0,.55*width]);
+  div.select('#d3barchart_title')
+     .text('An Example of D3 Bar Charts')
+     .style('text-shadow','4px 4px 4px darkslategray')
+     .style('color','silver')
+     .style('font-family',`${font_family}`)
+     .style('font-size',`${font_size_px}px`);
   div.selectAll('div').data(data).join('div')
       .style('background','silver')
       .style('padding','5px').style('margin','3px')
       .style('width',d=>`${x(d)}px`)
       .style('font-family',`${font_family}`)
-      .style('font-size','16px')
+      .style('font-size',`${font_size_px}px`)
       .text(d=>d);
   return div.node(); }
 );
