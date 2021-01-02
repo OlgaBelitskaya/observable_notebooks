@@ -1,4 +1,4 @@
-// https://observablehq.com/@olgabelitskaya/tf-practice-3@274
+// https://observablehq.com/@olgabelitskaya/tf-practice-3@294
 export default function define(runtime, observer) {
   const main = runtime.module();
   main.variable(observer()).define(["md"], function(md){return(
@@ -14,7 +14,7 @@ md`## MNIST Loading`
 10
 )});
   main.variable(observer("num_points")).define("num_points", function(){return(
-1*10**3
+3*10**3
 )});
   main.variable(observer("batch_size")).define("batch_size", function(){return(
 64
@@ -134,8 +134,13 @@ md`## CNN Model Building`
     metrics:['accuracy']});  
   return model; }
 );
+  main.define("initial epochs", function(){return(
+10
+)});
+  main.variable(observer("mutable epochs")).define("mutable epochs", ["Mutable", "initial epochs"], (M, _) => new M(_));
+  main.variable(observer("epochs")).define("epochs", ["mutable epochs"], _ => _.generator);
   main.define("initial step", function(){return(
-0
+1
 )});
   main.variable(observer("mutable step")).define("mutable step", ["Mutable", "initial step"], (M, _) => new M(_));
   main.variable(observer("step")).define("step", ["mutable step"], _ => _.generator);
@@ -149,16 +154,18 @@ md`## CNN Model Building`
 )});
   main.variable(observer("mutable accuracy")).define("mutable accuracy", ["Mutable", "initial accuracy"], (M, _) => new M(_));
   main.variable(observer("accuracy")).define("accuracy", ["mutable accuracy"], _ => _.generator);
-  main.variable(observer("train")).define("train", ["model","trainDataImages","trainDataLabels","batch_size","mutable step","mutable loss","mutable accuracy","tf"], function(model,trainDataImages,trainDataLabels,batch_size,$0,$1,$2,tf){return(
+  main.variable(observer("train")).define("train", ["mutable step","mutable epochs","model","trainDataImages","trainDataLabels","batch_size","step","mutable loss","mutable accuracy","tf"], function($0,$1,model,trainDataImages,trainDataLabels,batch_size,step,$2,$3,tf){return(
 async function train() {
-    const history=await model.fit(
-        trainDataImages,trainDataLabels,
-        {batch_size:batch_size,epochs:10,yieldEvery:'epoch',
-         validationSplit:.2,shuffle:true});
-    $0.value++;
-    $1.value=history.history.loss[0];
-    $2.value=history.history.acc[0];
-    await tf.nextFrame(); }
+    while ($0.value < $1.value) {
+        const history=await model.fit(
+            trainDataImages,trainDataLabels,
+            {batch_size:batch_size,epochs:step,yieldEvery:'epoch',
+             validationSplit:.2,shuffle:true});
+        $0.value++;
+        $2.value=history.history.loss[0];
+        $3.value=history.history.acc[0];
+        await tf.nextFrame(); }; 
+    await tf.nextFrame();}
 )});
   main.variable(observer()).define(["train"], function(train){return(
 train()
@@ -166,12 +173,15 @@ train()
   main.variable(observer()).define(["md"], function(md){return(
 md`## Predictions for Zero Arrays and Images`
 )});
-  main.variable(observer()).define(["model","tf"], function(model,tf){return(
-model.predict(tf.zeros([1,28,28,1])).data()
-)});
-  main.variable(observer("testPredictLabels")).define("testPredictLabels", ["model","testDataImages"], function(model,testDataImages){return(
-model.predict(testDataImages).argMax(1).data()
-)});
+  main.variable(observer()).define(["tf","model"], async function(tf,model)
+{ await tf.nextFrame();
+  return model.predict(tf.zeros([1,28,28,1])).data();}
+);
+  main.variable(observer()).define(["tf","model","testDataImages"], async function(tf,model,testDataImages)
+{ await tf.nextFrame();
+  const testPredictLabels=model.predict(testDataImages).argMax(1).data();
+  return testPredictLabels; }
+);
   main.variable(observer()).define(["testDataLabels"], function(testDataLabels){return(
 testDataLabels.argMax(1).data()
 )});
@@ -184,9 +194,10 @@ getImage(randInt)
   main.variable(observer()).define(["getLabel","randInt"], function(getLabel,randInt){return(
 getLabel(randInt)
 )});
-  main.variable(observer()).define(["model","dataImages","randInt"], function(model,dataImages,randInt){return(
-model.predict(dataImages.slice(randInt,1)).argMax(1).data()
-)});
+  main.variable(observer()).define(["tf","model","dataImages","randInt"], async function(tf,model,dataImages,randInt)
+{ await tf.nextFrame();
+  return model.predict(dataImages.slice(randInt,1)).argMax(1).data(); }
+);
   main.variable(observer("tf")).define("tf", ["require"], function(require){return(
 require('@tensorflow/tfjs')
 )});
