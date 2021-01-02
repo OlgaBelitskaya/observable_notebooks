@@ -1,4 +1,4 @@
-// https://observablehq.com/@olgabelitskaya/tf-practice-3@233
+// https://observablehq.com/@olgabelitskaya/tf-practice-3@274
 export default function define(runtime, observer) {
   const main = runtime.module();
   main.variable(observer()).define(["md"], function(md){return(
@@ -14,7 +14,7 @@ md`## MNIST Loading`
 10
 )});
   main.variable(observer("num_points")).define("num_points", function(){return(
-2*10**3
+1*10**3
 )});
   main.variable(observer("batch_size")).define("batch_size", function(){return(
 64
@@ -134,9 +134,34 @@ md`## CNN Model Building`
     metrics:['accuracy']});  
   return model; }
 );
-  main.variable(observer()).define(["model","trainDataImages","trainDataLabels","batch_size"], function(model,trainDataImages,trainDataLabels,batch_size){return(
-model.fit(trainDataImages,trainDataLabels,
-          ({batch_size:batch_size,epochs:30,validationSplit:.2,shuffle:true}))
+  main.define("initial step", function(){return(
+0
+)});
+  main.variable(observer("mutable step")).define("mutable step", ["Mutable", "initial step"], (M, _) => new M(_));
+  main.variable(observer("step")).define("step", ["mutable step"], _ => _.generator);
+  main.define("initial loss", function(){return(
+0
+)});
+  main.variable(observer("mutable loss")).define("mutable loss", ["Mutable", "initial loss"], (M, _) => new M(_));
+  main.variable(observer("loss")).define("loss", ["mutable loss"], _ => _.generator);
+  main.define("initial accuracy", function(){return(
+0
+)});
+  main.variable(observer("mutable accuracy")).define("mutable accuracy", ["Mutable", "initial accuracy"], (M, _) => new M(_));
+  main.variable(observer("accuracy")).define("accuracy", ["mutable accuracy"], _ => _.generator);
+  main.variable(observer("train")).define("train", ["model","trainDataImages","trainDataLabels","batch_size","mutable step","mutable loss","mutable accuracy","tf"], function(model,trainDataImages,trainDataLabels,batch_size,$0,$1,$2,tf){return(
+async function train() {
+    const history=await model.fit(
+        trainDataImages,trainDataLabels,
+        {batch_size:batch_size,epochs:10,yieldEvery:'epoch',
+         validationSplit:.2,shuffle:true});
+    $0.value++;
+    $1.value=history.history.loss[0];
+    $2.value=history.history.acc[0];
+    await tf.nextFrame(); }
+)});
+  main.variable(observer()).define(["train"], function(train){return(
+train()
 )});
   main.variable(observer()).define(["md"], function(md){return(
 md`## Predictions for Zero Arrays and Images`
