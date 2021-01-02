@@ -1,4 +1,4 @@
-// https://observablehq.com/@olgabelitskaya/tf-practice-3@294
+// https://observablehq.com/@olgabelitskaya/tf-practice-3@304
 export default function define(runtime, observer) {
   const main = runtime.module();
   main.variable(observer()).define(["md"], function(md){return(
@@ -135,7 +135,7 @@ md`## CNN Model Building`
   return model; }
 );
   main.define("initial epochs", function(){return(
-10
+12
 )});
   main.variable(observer("mutable epochs")).define("mutable epochs", ["Mutable", "initial epochs"], (M, _) => new M(_));
   main.variable(observer("epochs")).define("epochs", ["mutable epochs"], _ => _.generator);
@@ -164,7 +164,8 @@ async function train() {
         $0.value++;
         $2.value=history.history.loss[0];
         $3.value=history.history.acc[0];
-        await tf.nextFrame(); }; 
+        await tf.nextFrame(); 
+        return history.history; }; 
     await tf.nextFrame();}
 )});
   main.variable(observer()).define(["train"], function(train){return(
