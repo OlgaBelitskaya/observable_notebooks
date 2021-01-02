@@ -1,4 +1,4 @@
-// https://observablehq.com/@olgabelitskaya/styling-of-mouse-events@147
+// https://observablehq.com/@olgabelitskaya/styling-of-mouse-events@163
 export default function define(runtime, observer) {
   const main = runtime.module();
   main.variable(observer()).define(["md"], function(md){return(
@@ -15,7 +15,9 @@ md`# 📑 Styling of Mouse Events`
     .on('pointerdown',e=>{
       if (canvas.dbltap(e)) return clear(context);
       track(e,{
-        start:line=>{console.log('start',line);},
+        start:line=>{
+          line.color_coef=Math.floor(50*Math.random()+1);
+          console.log('start',line);},
         move:line=>{draw(context,line); console.log('move',line);},
         out:line=>console.log('out',line),
         end:line=>console.log('end',line)});});
@@ -63,7 +65,8 @@ function draw(context,line) {
     if (line.prev) {
       context.beginPath();
       context.lineWidth=pressure;
-      context.strokeStyle=d3.interpolateSinebow(Date.now()/1000);
+      context.strokeStyle=d3.interpolateSinebow(
+          Date.now()/10/line.color_coef);
       context.moveTo(...line.prev);
       context.lineTo(...line.point);
       context.lineCap='round';

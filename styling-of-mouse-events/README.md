@@ -1,6 +1,6 @@
 # 📑 Styling of Mouse Events
 
-https://observablehq.com/@olgabelitskaya/styling-of-mouse-events@147
+https://observablehq.com/@olgabelitskaya/styling-of-mouse-events@163
 
 View this notebook in your browser by running a web server in this folder. For
 example:
