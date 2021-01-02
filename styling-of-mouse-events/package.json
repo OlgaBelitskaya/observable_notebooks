@@ -1,0 +1,14 @@
+{
+  "name": "@olgabelitskaya/styling-of-mouse-events",
+  "main": "82b21988b49d94d6@147.js",
+  "version": "147.0.0",
+  "homepage": "https://observablehq.com/@olgabelitskaya/styling-of-mouse-events",
+  "author": {
+    "name": "Olga Belitskaya",
+    "url": "https://observablehq.com/@olgabelitskaya"
+  },
+  "type": "module",
+  "peerDependencies": {
+    "@observablehq/runtime": "4"
+  }
+}
