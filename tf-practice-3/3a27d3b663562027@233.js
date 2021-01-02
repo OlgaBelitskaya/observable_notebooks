@@ -1,14 +1,8 @@
-// https://observablehq.com/@olgabelitskaya/tf-practice-3@71
+// https://observablehq.com/@olgabelitskaya/tf-practice-3@233
 export default function define(runtime, observer) {
   const main = runtime.module();
   main.variable(observer()).define(["md"], function(md){return(
 md`# 📑 Tf Practice 3`
-)});
-  main.variable(observer()).define(["md"], function(md){return(
-md`## Predictions for Zero Arrays`
-)});
-  main.variable(observer()).define(["model","tf"], function(model,tf){return(
-model.predict(tf.zeros([1,28,28,1])).data()
 )});
   main.variable(observer()).define(["md"], function(md){return(
 md`## MNIST Loading`
@@ -20,7 +14,7 @@ md`## MNIST Loading`
 10
 )});
   main.variable(observer("num_points")).define("num_points", function(){return(
-1*10**3
+2*10**3
 )});
   main.variable(observer("batch_size")).define("batch_size", function(){return(
 64
@@ -65,14 +59,32 @@ function getImage(i) {
 i=>labels.subarray(i*num_classes,(i+1)*num_classes)
                    .findIndex(value=>value===1)
 )});
-  main.variable(observer("randInt")).define("randInt", ["num_points"], function(num_points){return(
-Math.floor(num_points*Math.random())
+  main.variable(observer()).define(["md"], function(md){return(
+md`## Data Processing`
 )});
-  main.variable(observer()).define(["getImage","randInt"], function(getImage,randInt){return(
-getImage(randInt)
+  main.variable(observer("tidy")).define("tidy", ["Generators","tf"], function(Generators,tf){return(
+f=>Generators.disposable(
+    tf.tidy(f),x=>x&&x.dispose&&x.dispose())
 )});
-  main.variable(observer()).define(["getLabel","randInt"], function(getLabel,randInt){return(
-getLabel(randInt)
+  main.variable(observer("dataLabels")).define("dataLabels", ["tidy","tf","labels","num_points","num_classes"], function(tidy,tf,labels,num_points,num_classes){return(
+tidy(()=>
+    tf.tensor2d(labels,[num_points,num_classes]))
+)});
+  main.variable(observer("dataImages")).define("dataImages", ["tidy","tf","images","num_points","img_size"], function(tidy,tf,images,num_points,img_size){return(
+tidy(()=>
+    tf.tensor4d(images,[num_points,img_size,img_size,1]))
+)});
+  main.variable(observer("trainDataLabels")).define("trainDataLabels", ["dataLabels","num_points"], function(dataLabels,num_points){return(
+dataLabels.slice(1,.8*num_points)
+)});
+  main.variable(observer("testDataLabels")).define("testDataLabels", ["dataLabels","num_points"], function(dataLabels,num_points){return(
+dataLabels.slice(.8*num_points,.2*num_points)
+)});
+  main.variable(observer("trainDataImages")).define("trainDataImages", ["dataImages","num_points"], function(dataImages,num_points){return(
+dataImages.slice(1,.8*num_points)
+)});
+  main.variable(observer("testDataImages")).define("testDataImages", ["dataImages","num_points"], function(dataImages,num_points){return(
+dataImages.slice(.8*num_points,.2*num_points)
 )});
   main.variable(observer()).define(["md"], function(md){return(
 md`## CNN Model Building`
@@ -106,22 +118,50 @@ md`## CNN Model Building`
     poolSize:[2,2],strides:[2,2]}) );
   model.add( tf.layers.dropout({rate:.25}) ); 
   
-  model.add(tf.layers.globalMaxPooling2d({
-    dataFormat:'channelsLast'}));
-  model.add(tf.layers.dense({
-    units:512,kernelInitializer:'VarianceScaling'})); 
+  model.add( tf.layers.globalMaxPooling2d({
+    dataFormat:'channelsLast'}) );
+  model.add( tf.layers.dense({
+    units:512,kernelInitializer:'VarianceScaling'}) ); 
   model.add( tf.layers.leakyReLU({alpha:.02}) );
   model.add( tf.layers.dropout({rate:.5}) );
   
-  model.add(tf.layers.dense({
+  model.add( tf.layers.dense({
     units:num_classes,activation:'softmax',
-    kernelInitializer:'VarianceScaling'}));  
+    kernelInitializer:'VarianceScaling'}) );  
   await model.compile({
     optimizer:tf.train.adam(),
     loss:'categoricalCrossentropy',
     metrics:['accuracy']});  
   return model; }
 );
+  main.variable(observer()).define(["model","trainDataImages","trainDataLabels","batch_size"], function(model,trainDataImages,trainDataLabels,batch_size){return(
+model.fit(trainDataImages,trainDataLabels,
+          ({batch_size:batch_size,epochs:30,validationSplit:.2,shuffle:true}))
+)});
+  main.variable(observer()).define(["md"], function(md){return(
+md`## Predictions for Zero Arrays and Images`
+)});
+  main.variable(observer()).define(["model","tf"], function(model,tf){return(
+model.predict(tf.zeros([1,28,28,1])).data()
+)});
+  main.variable(observer("testPredictLabels")).define("testPredictLabels", ["model","testDataImages"], function(model,testDataImages){return(
+model.predict(testDataImages).argMax(1).data()
+)});
+  main.variable(observer()).define(["testDataLabels"], function(testDataLabels){return(
+testDataLabels.argMax(1).data()
+)});
+  main.variable(observer("randInt")).define("randInt", ["num_points"], function(num_points){return(
+Math.floor(num_points*(.8+.2*Math.random()))
+)});
+  main.variable(observer()).define(["getImage","randInt"], function(getImage,randInt){return(
+getImage(randInt)
+)});
+  main.variable(observer()).define(["getLabel","randInt"], function(getLabel,randInt){return(
+getLabel(randInt)
+)});
+  main.variable(observer()).define(["model","dataImages","randInt"], function(model,dataImages,randInt){return(
+model.predict(dataImages.slice(randInt,1)).argMax(1).data()
+)});
   main.variable(observer("tf")).define("tf", ["require"], function(require){return(
 require('@tensorflow/tfjs')
 )});
