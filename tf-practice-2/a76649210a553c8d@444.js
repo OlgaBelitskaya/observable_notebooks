@@ -1,4 +1,4 @@
-// https://observablehq.com/@olgabelitskaya/tf-practice-2@434
+// https://observablehq.com/@olgabelitskaya/tf-practice-2@444
 export default function define(runtime, observer) {
   const main = runtime.module();
   main.variable(observer()).define(["md"], function(md){return(
