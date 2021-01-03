@@ -1,0 +1,14 @@
+{
+  "name": "@olgabelitskaya/tf-practice-2",
+  "main": "a76649210a553c8d@407.js",
+  "version": "407.0.0",
+  "homepage": "https://observablehq.com/@olgabelitskaya/tf-practice-2",
+  "author": {
+    "name": "Olga Belitskaya",
+    "url": "https://observablehq.com/@olgabelitskaya"
+  },
+  "type": "module",
+  "peerDependencies": {
+    "@observablehq/runtime": "4"
+  }
+}
