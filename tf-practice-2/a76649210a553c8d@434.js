@@ -1,4 +1,4 @@
-// https://observablehq.com/@olgabelitskaya/tf-practice-2@407
+// https://observablehq.com/@olgabelitskaya/tf-practice-2@434
 export default function define(runtime, observer) {
   const main = runtime.module();
   main.variable(observer()).define(["md"], function(md){return(
@@ -91,6 +91,31 @@ await mobilenet.classify(tensor1,topK)
   main.variable(observer("predict2")).define("predict2", ["mobilenet","tensor2","topK"], async function(mobilenet,tensor2,topK){return(
 await mobilenet.classify(tensor2,topK)
 )});
+  main.variable(observer("mn_predictions")).define("mn_predictions", ["imagenetClassIdx","html"], function(imagenetClassIdx,html){return(
+function(predictions) {  
+  const text=predictions.map(prediction=>
+      prediction.probability.toFixed(3)+': '+prediction.className+'<br>'); 
+  const rows=predictions.map(prediction=> `
+    <div style='display:table-row; background:silver;'>
+      <div style='display:table-cell; width:300px; padding:2px'>
+        ${prediction.className}</div>
+      <div style='display:table-cell; padding:2px; text-align:center;'>
+        ${prediction.probability.toFixed(3)}</div>
+      <div style='display:table-cell; padding:2px; text-align:center;'>
+        ${imagenetClassIdx[prediction.className]}</div>
+    </div>`);
+  return html`
+    <div style='display:table-row; font-weight:bold; 
+      text-align:center; background:silver;'>
+      <div style='display:table-cell; border:double black; 
+        padding:5px'>class</div>
+      <div style='display:table-cell; border:double black;
+        padding:5px'>probability</div>
+      <div style='display:table-cell; border:double black; 
+        padding:5px'>imagenet class id</div>
+    </div>
+  ${rows.join('')}`}
+)});
   main.variable(observer()).define(["mn_predictions","predict0"], function(mn_predictions,predict0){return(
 mn_predictions(predict0)
 )});
@@ -99,27 +124,6 @@ mn_predictions(predict1)
 )});
   main.variable(observer()).define(["mn_predictions","predict2"], function(mn_predictions,predict2){return(
 mn_predictions(predict2)
-)});
-  main.variable(observer("mn_predictions")).define("mn_predictions", ["imagenetClassIdx","html"], function(imagenetClassIdx,html){return(
-function(predictions) {  
-  const text=predictions.map(prediction=>
-      prediction.probability.toFixed(3)+': '+prediction.className+'<br>'); 
-  const rows=predictions.map(prediction=> `
-    <div style='display:table-row;'>
-      <div style='display:table-cell; padding:0 20px 0 10px'>
-        ${prediction.className}</div>
-      <div style='display:table-cell; padding:0 20px 0 30px'>
-        ${prediction.probability.toFixed(3)}</div>
-      <div style='display:table-cell; padding:0 20px 0 50px'>
-        ${imagenetClassIdx[prediction.className]}</div>
-    </div>`);
-  return html`
-    <div style='display:table-row; font-weight:bold; text-align:center'>
-      <div style='display:table-cell; padding:0 10px 0 0'>class</div>
-      <div style='display:table-cell; padding:0 10px 0 0'>probability</div>
-      <div style='display:table-cell; padding:0 10px 0 0'>imagenet class id</div>
-    </div>
-  ${rows.join('')}`}
 )});
   main.variable(observer()).define(["md"], function(md){return(
 md`## Tools`
